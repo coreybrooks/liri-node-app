@@ -29,5 +29,6 @@ Example: node liri.js movie-this fight club
 
 4: do-what-it-says
 LIRI will read the file random.txt and take in the action and title contained within to perform a Twitter API,  Spotify API, or OMDb API search.
+Example: node liri.js do-what-it-says
 
    
