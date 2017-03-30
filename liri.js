@@ -1,6 +1,8 @@
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
+var fs = require('fs');
+var Promise = require('promise');
 
 var keysINeed = require("./keys.js");
 var keys = keysINeed.twitterKeys;
@@ -33,7 +35,7 @@ for (i=3; i<nodeArgs.length; i++) {
     rotTitle = rotTitle + '_' + nodeArgs[i].toLowerCase();
     }
     //below creates the first word of the Rotten tomatoes URL, but does not include 'the'
-    else if (nodeArgs[3].toLocaleLowerCase() !== 'the') {
+    else if (nodeArgs[3].toLocaleLowerCase() !== 'the' && nodeArgs[3].toLocaleLowerCase() !== 'a' ) {
         rotTitle += nodeArgs[i].toLowerCase();
     }
   }
@@ -42,6 +44,43 @@ if (rotTitle.charAt(0) === '_') {
     rotTitle = rotTitle.substring(1);
 }
 
+//function readRandom() {
+  //  return new Promise((resolve, reject) => {
+    //  fs.readFile("random.txt", "utf8", function(err, data) {
+     // var output = data.split(",");
+     // action = output[0];
+     // title = output[1];
+     // console.log('action at 1: ' + action);
+     // console.log('title at 1: ' + title);  
+      //return resolve(data);
+     // return title;   
+     // });
+   //});
+//}
+
+//if (nodeArgs[2] === 'do-what-it-says') {
+ //  readRandom().then(console.log('promised action: ' + Promise.resolve(data)));
+//}
+
+if (nodeArgs[2] === 'do-what-it-says') {
+   fs.readFile("random.txt", "utf8", function(err, data) {
+      var output = data.split(",");
+      action = output[0];
+      title = output[1];
+      console.log('action at 1: ' + action);
+      console.log('title at 1: ' + title); 
+      console.log('------------------------');    
+  });
+}
+
+
+console.log('action at 2: ' + action);
+console.log('title at 2: ' + title);
+console.log('--------------');
+
+//delay the switch cases by .2 seconds because we have not been taught promises yet
+setTimeout(function() {
+//below builds the case for each action
 switch(action) {
  
    case 'my-tweets': 
@@ -84,12 +123,21 @@ switch(action) {
    break;
 
    case 'movie-this':
+        //set the default movie to Mr. Nobody if no movie is entered    
+        if (title === '') {
+            title = 'mr+nobody';
+            rotTitle = 'mr_nobody';
+            console.log('You didn\'t enter a movie, here is your default:');
+        }
        var queryUrl = "http://www.omdbapi.com/?t=" + title + "&y=&plot=short&r=json";
-       console.log(queryUrl);
        request(queryUrl, function(error, response, body) {
-          if (!error && response.statusCode === 200) {
+              if(JSON.parse(body).Response === 'False') {
+                console.log('No results, try a different spelling:');
+              }
+
+         else if (!error && response.statusCode === 200) {
            console.log('Movie Title: ' + JSON.parse(body).Title);
-           console.log("Release Year: " + JSON.parse(body).Year);
+           console.log('Release Year: ' + JSON.parse(body).Year);
            console.log('Rated: ' + JSON.parse(body).Rated);
            console.log('Country where the movie was produced: ' + JSON.parse(body).Country);
            console.log('Language of the movie: ' + JSON.parse(body).Language);
@@ -97,11 +145,10 @@ switch(action) {
            console.log('Actors in the movie: ' + JSON.parse(body).Actors);
            console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).Ratings[1].Value);
            console.log('Rotten Tomatoes URL: ' + 'https://www.rottentomatoes.com/m/' + rotTitle);
+           console.log('Rotten Tomatoes Search: ' + 'https://www.rottentomatoes.com/search/?search=' + title);
+           console.log('--- if the URL link doesn\'t work use the search link');
           }
        });
    break;
-
-   case 'do-what-it-says':
-   break;
 }
-
+}, .2*1000);

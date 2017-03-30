@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/coreybrooks/liri-node-app#readme",
   "dependencies": {
+    "promise": "^7.1.1",
     "request": "^2.81.0",
     "spotify": "^0.3.0",
     "twitter": "^1.7.0"
