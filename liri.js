@@ -44,24 +44,6 @@ if (rotTitle.charAt(0) === '_') {
     rotTitle = rotTitle.substring(1);
 }
 
-//function readRandom() {
-  //  return new Promise((resolve, reject) => {
-    //  fs.readFile("random.txt", "utf8", function(err, data) {
-     // var output = data.split(",");
-     // action = output[0];
-     // title = output[1];
-     // console.log('action at 1: ' + action);
-     // console.log('title at 1: ' + title);  
-      //return resolve(data);
-     // return title;   
-     // });
-   //});
-//}
-
-//if (nodeArgs[2] === 'do-what-it-says') {
- //  readRandom().then(console.log('promised action: ' + Promise.resolve(data)));
-//}
-
 if (nodeArgs[2] === 'do-what-it-says') {
    fs.readFile("random.txt", "utf8", function(err, data) {
       var output = data.split(",");
@@ -78,7 +60,6 @@ console.log('action at 2: ' + action);
 console.log('title at 2: ' + title);
 console.log('--------------');
 
-//delay the switch cases by .2 seconds because we have not been taught promises yet
 setTimeout(function() {
 //below builds the case for each action
 switch(action) {
